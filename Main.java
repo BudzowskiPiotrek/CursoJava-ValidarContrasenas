@@ -7,6 +7,7 @@ public class Main {
 	private static Usuario[] usuarios = new Usuario[100];
 
 	public static void main(String[] args) {
+		// PARA EMPEZAR PEDIRA PRIMERO UNA CUENTA QUE SERIA UN ADMINISTRADOR.
 		registrarAdministrador();
 		menu();
 	}
