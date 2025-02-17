@@ -19,7 +19,6 @@ public class Main {
 			int flag = sn.nextInt();
 			menuDos(flag);
 		}
-
 	}
 
 	private static void menuDos(int flag) {
@@ -34,7 +33,68 @@ public class Main {
 			System.err.println("Opción no válida. Intenta de nuevo.");
 		}
 	}
+	
+	// METODO REGISTRAR USUARIO PRIMERO SACARA POSICION LIBRE EN LA LISTA DE ARRAY
+	// DE USUARIOS POSTERIORMENTE SI NO DEVOLVERA -1 PROCEDERA A PREGUNTARLE POR EL
+	// NOMBRE, AL CREAR CONSTRUCTOR NUEVO DE NEW USUARIO SE EJECUTARA SETER CON
+	// PEDIR CONTRASEÑA QUE GENERARA UNA EXCEPCION SI NO CUMPLIRA PARAMETROS
+	// SOLICITADOS EL TRY CATCH Y BUCLE FOR SIRVEN PARA MANTENER PREGUNTANDO LA
+	// CONTRASEÑA HASTA INGRESARLA BIEN.
 
+	private static void registrarUsuario() {
+		int posicion = buscadorIdLibre();
+		if (posicion != -1) {
+			System.out.println("Dime el nombre del usuario");
+			String nombre = st.nextLine();
+			for (int i = 1; i < 2; i++) {
+				try {
+					System.out.println(
+							"Escribe una contraseña, al menos 8 caracteres, incluya una letra mayuscula, un numero y un caracter especial = [@ $ ! % * ? &]");
+					usuarios[posicion] = new Usuario(nombre);
+				} catch (IllegalArgumentException e) {
+					i = 0;
+					System.out.println("Contraseña incorrecta");
+				}
+			}
+			System.out.println(" Hola " + nombre + " tu ID de usuario es : " + posicion);
+		}
+
+	}
+
+	// METODO REGISTRAR ADMINISTRADOR LA MISMA FORMA COMO DE USURIO
+
+	private static void registrarAdministrador() {
+		int posicion = buscadorIdLibre();
+		if (posicion != -1) {
+			System.out.println("Dime el nombre del usuario del Administrador");
+			String nombre = st.nextLine();
+			for (int i = 1; i < 2; i++) {
+				try {
+					System.out.println(
+							"Escribe una contraseña, al menos 8 caracteres, incluya una letra mayuscula, un numero y un caracter especial = [@ $ ! % * ? &]");
+					usuarios[posicion] = new Administrador(nombre);
+				} catch (IllegalArgumentException e) {
+					i = 0;
+					System.out.println("Contraseña incorrecta");
+				}
+			}
+			System.out.println("Hola " + nombre + " tu ID de adminitrador es : " + posicion);
+		}
+
+	}
+	
+	// METODO BUSCADOR DE ID LIBRE SIRVE, PARA BUSCAR PRIMERA POSICION LIBRE EN LA
+	// LISTA DE USUARIOS EN CASO DE TENERLA LLENA VOLVERIA -1 A MODO DE SEGURO.
+
+	private static int buscadorIdLibre() {
+		for (int i = 0; i < usuarios.length; i++) {
+			if (usuarios[i] == null) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	// METODO PARA INICIAR SESION DESPUES DE PEDIR LA ID DE USUARIO, SE COROBORARA
 	// SI EXISTE ESTE NUMERO Y SI ESTA FEURA DE RANGO DE LA ARRAY INFORMANDO QUE ID
 	// NO SE ENCONTRO, SI SE INGRESARA BIEN, SE PEDIRA CONTRASEÑA, SE LA COMPROBARA
@@ -61,7 +121,8 @@ public class Main {
 			System.out.println("La ID de usuario no se encontró.");
 		}
 	}
-
+	
+	
 	// METODO PANEL DE ADMINITRADOR DESAROLLARA SOLAMENTE OPCION DE RESTABLECER
 	// CONTRASEÑA DE CUALQUIER USUARIO O SALIR DE LA APLICACION.
 
@@ -119,68 +180,5 @@ public class Main {
 				flag = false;
 				break;
 			}
-
 		} while (flag);
-
-	}
-
-	// METODO REGISTRAR USUARIO PRIMERO SACARA POSICION LIBRE EN LA LISTA DE ARRAY
-	// DE USUARIOS POSTERIORMENTE SI NO DEVOLVERA -1 PROCEDERA A PREGUNTARLE POR EL
-	// NOMBRE, AL CREAR CONSTRUCTOR NUEVO DE NEW USUARIO SE EJECUTARA SETER CON
-	// PEDIR CONTRASEÑA QUE GENERARA UNA EXCEPCION SI NO CUMPLIRA PARAMETROS
-	// SOLICITADOS EL TRY CATCH Y BUCLE FOR SIRVEN PARA MANTENER PREGUNTANDO LA
-	// CONTRASEÑA HASTA INGRESARLA BIEN.
-
-	private static void registrarUsuario() {
-		int posicion = buscadorIdLibre();
-		if (posicion != -1) {
-			System.out.println("Dime el nombre del usuario");
-			String nombre = st.nextLine();
-			for (int i = 1; i < 2; i++) {
-				try {
-					System.out.println(
-							"Escribe una contraseña, al menos 8 caracteres, incluya una letra mayuscula, un numero y un caracter especial = [@ $ ! % * ? &]");
-					usuarios[posicion] = new Usuario(nombre);
-				} catch (IllegalArgumentException e) {
-					i = 0;
-					System.out.println("Contraseña incorrecta");
-				}
-			}
-			System.out.println(" Hola " + nombre + " tu ID de usuario es : " + posicion);
-		}
-
-	}
-
-	// METODO REGISTRAR ADMINISTRADOR LA MISMA FORMA COMO DE USURIO
-
-	private static void registrarAdministrador() {
-		int posicion = buscadorIdLibre();
-		if (posicion != -1) {
-			System.out.println("Dime el nombre del usuario del Administrador");
-			String nombre = st.nextLine();
-			for (int i = 1; i < 2; i++) {
-				try {
-					System.out.println(
-							"Escribe una contraseña, al menos 8 caracteres, incluya una letra mayuscula, un numero y un caracter especial = [@ $ ! % * ? &]");
-					usuarios[posicion] = new Administrador(nombre);
-				} catch (IllegalArgumentException e) {
-					i = 0;
-					System.out.println("Contraseña incorrecta");
-				}
-			}
-			System.out.println("Hola " + nombre + " tu ID de adminitrador es : " + posicion);
-		}
-
-	}
-
-	// METODO BUSCADOR DE ID LIBRE SIRVE, PARA BUSCAR PRIMERA POSICION LIBRE EN LA
-	// LISTA DE USUARIOS EN CASO DE TENERLA LLENA VOLVERIA -1 A MODO DE SEGURO.
-
-	private static int buscadorIdLibre() {
-		for (int i = 0; i < usuarios.length; i++) {
-			if (usuarios[i] == null) {
-				return i;
-			}
-		}
-		return -1;
 	}
