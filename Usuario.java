@@ -1,3 +1,5 @@
+package validacionUsuario;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -5,19 +7,21 @@ import java.util.regex.Pattern;
 public class Usuario {
 
 	// CLASE USUARIO CON SUS TRES VARIABLES
-	private String nombreUsuario;
-	private String contrasena;
-	private String[] tresContrasenas;
+	protected String nombreUsuario;
+	protected String contrasena;
+	protected String[] tresContrasenas;
 
-	// CREO UN CONSTRUCTOR QUE PEDIRA SOLAMENTE EL NOMBRE DE USUARIO, Y EJECUTARA METODO DE PEDIR
-	// CONTRASEÑA QUE DESAROLLARE EN SETCONTRASENA PARA PODER UTILIZARLO DE NUEVO EN MOMENTO DE CAMBIAR 
+	// CREO UN CONSTRUCTOR QUE PEDIRA SOLAMENTE EL NOMBRE DE USUARIO, Y EJECUTARA
+	// METODO DE PEDIR
+	// CONTRASEÑA QUE DESAROLLARE EN SETCONTRASENA PARA PODER UTILIZARLO DE NUEVO EN
+	// MOMENTO DE CAMBIAR
 	// LA CONTRASEÑA.
-	
 
 	public Usuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
 		this.tresContrasenas = new String[3];
 		setContrasena();
+
 	}
 
 	public String getNombreUsuario() {
@@ -32,12 +36,16 @@ public class Usuario {
 		return contrasena;
 	}
 
-	// DESAROLLO UN METODO QUE PRIMERO CON UNA EXPRESION REGULAR COMPROBARA SI LA CONTRASEÑA TIENE
-	// EN ALGUN LADO AL MENOS UN CARACTER EN MAYUSCULA, EN ALGUN LADO AL MENOS UN NUMERO, EN ALGUN
-	// PARTE UN SIGNO RARO, Y AL MENOS 8 CARACTERES, POSTERIORMENTE CREO UN BUCLE QUE SI NO SE CUMPLE 
-	// O ESTA REPETIDA, EN LAS TRES ANTERIORES CONTRASEÑAS VALIDAS, VOLVERA A PEDIR UNA Y OTRA VEZ
+	// DESAROLLO UN METODO QUE PRIMERO CON UNA EXPRESION REGULAR COMPROBARA SI LA
+	// CONTRASEÑA TIENE
+	// EN ALGUN LADO AL MENOS UN CARACTER EN MAYUSCULA, EN ALGUN LADO AL MENOS UN
+	// NUMERO, EN ALGUN
+	// PARTE UN SIGNO RARO, Y AL MENOS 8 CARACTERES, POSTERIORMENTE CREO UN BUCLE
+	// QUE SI NO SE CUMPLE
+	// O ESTA REPETIDA, EN LAS TRES ANTERIORES CONTRASEÑAS VALIDAS, VOLVERA A PEDIR
+	// UNA Y OTRA VEZ
 	// PARA AQUELLO CREO DOS METODOS MAS.
-	
+
 	public void setContrasena() {
 		Scanner sn = new Scanner(System.in);
 		String nuevaContrasena;
@@ -46,19 +54,15 @@ public class Usuario {
 		boolean seguro = true;
 
 		while (seguro) {
-			System.out.print(
-					"Escribe una contraseña, al menos 8 caracteres, incluya una letra mayuscula, un numero y un caracter especial = [@ $ ! % * ? &]");
 			nuevaContrasena = sn.nextLine();
 			Matcher m = p.matcher(nuevaContrasena);
 
 			if (m.matches() && contrasenaRepetida(nuevaContrasena)) {
 				this.contrasena = nuevaContrasena;
 				actualizarTresContrasenas(nuevaContrasena);
-				System.out.println("Contraseña guardada.");
 				seguro = false;
 			} else {
-				System.err.println(
-						"Error: La contraseña debe tener al menos 8 caracteres, una MAYUSCULA, un numero y un caracter especial.");
+				throw new IllegalArgumentException();
 			}
 		}
 	}
@@ -70,10 +74,11 @@ public class Usuario {
 	public void setTresContrasenas(String[] tresContrasenas) {
 		this.tresContrasenas = tresContrasenas;
 	}
-	
-	// PRIMERO DE ELLOS ES SOLO PARA RECORER ARRAY DE TRES ULTIMAS CONTRASEÑAS Y SI ENCUENTRA QUE ESTA 
+
+	// PRIMERO DE ELLOS ES SOLO PARA RECORER ARRAY DE TRES ULTIMAS CONTRASEÑAS Y SI
+	// ENCUENTRA QUE ESTA
 	// IGUAL DEVOLVERA FALLO DE OPERACION.
-	
+
 	private boolean contrasenaRepetida(String nuevaContrasena) {
 		boolean noEncontrado = true;
 		for (int i = 0; i < tresContrasenas.length; i++) {
@@ -83,10 +88,12 @@ public class Usuario {
 		}
 		return noEncontrado;
 	}
-	
-	// SEGUNDO PARA GUARDAR LA CONTRASEÑA NUEVA EN PUESTO 0 Y CAMBIAR DE POSISION OTRAS PERDIENDO SIEMPRE 
-	// LA TERCERA EN CASO DE QUE HUBIERA CAMBIADO Y LLEGADO A 4 CONTRASEÑAS EN LA APP.
-	
+
+	// SEGUNDO PARA GUARDAR LA CONTRASEÑA NUEVA EN PUESTO 0 Y CAMBIAR DE POSISION
+	// OTRAS PERDIENDO SIEMPRE
+	// LA TERCERA EN CASO DE QUE HUBIERA CAMBIADO Y LLEGADO A 4 CONTRASEÑAS EN LA
+	// APP.
+
 	private void actualizarTresContrasenas(String nuevaContrasena) {
 		for (int i = tresContrasenas.length - 1; i > 0; i--) {
 			tresContrasenas[i] = tresContrasenas[i - 1];
