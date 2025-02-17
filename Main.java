@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
@@ -6,14 +7,11 @@ public class Main {
 	private static Usuario[] usuarios = new Usuario[100];
 
 	public static void main(String[] args) {
-
 		registrarAdministrador();
 		menu();
-
 	}
 
 	private static void menu() {
-
 		while (true) {
 			System.out.println("1.Registrar nuevos usuarios");
 			System.out.println("2.Iniciar sesión");
@@ -29,16 +27,99 @@ public class Main {
 			registrarUsuario();
 			break;
 		case 2:
-			iniciarSecion();
+			iniciarSesion();
 			break;
 		default:
 			System.err.println("Opción no válida. Intenta de nuevo.");
-
 		}
+	}
+
+	// METODO PARA INICIAR SESION DESPUES DE PEDIR LA ID DE USUARIO, SE COROBORARA
+	// SI EXISTE ESTE NUMERO Y SI ESTA FEURA DE RANGO DE LA ARRAY INFORMANDO QUE ID
+	// NO SE ENCONTRO, SI SE INGRESARA BIEN, SE PEDIRA CONTRASEÑA, SE LA COMPROBARA
+	// ECT, EN ULTMIMO LUGAR COMBOBARA TIPO DE CUENTA PARA CARGAR PANEL DE
+	// ADMINISTRADOR O DE USUARIO NORMAL
+
+	private static void iniciarSesion() {
+		System.out.println("Ingrese tu ID: ");
+		int id = sn.nextInt();
+
+		if (id >= 0 && id < usuarios.length && usuarios[id] != null) {
+			System.out.println("Ingrese tu contraseña: ");
+			String contrasena = st.nextLine();
+			if (contrasena.equals(usuarios[id].getContrasena())) {
+				if (usuarios[id] instanceof Administrador) {
+					panelAdminitrador(id);
+				} else {
+					panelUsuario(id);
+				}
+			} else {
+				System.out.println("Contraseña incorrecta.");
+			}
+		} else {
+			System.out.println("La ID de usuario no se encontró.");
+		}
+	}
+
+	// METODO PANEL DE ADMINITRADOR DESAROLLARA SOLAMENTE OPCION DE RESTABLECER
+	// CONTRASEÑA DE CUALQUIER USUARIO O SALIR DE LA APLICACION.
+
+	private static void panelAdminitrador(int id) {
+		boolean flag = true;
+		do {
+			System.out.println("BIENVENIDO ADMINISTRADOR");
+			System.out.println("1.Restablecer contraseña de usuario");
+			System.out.println("2.Para Salir");
+			int opcion = sn.nextInt();
+			switch (opcion) {
+			case 1:
+				System.out.println("Dime id de usuario: ");
+				int restablecer = sn.nextInt();
+				if (restablecer >= 0 && restablecer < usuarios.length && usuarios[restablecer] != null) {
+					if (usuarios[restablecer] instanceof Usuario) {
+						Administrador administrador = (Administrador) usuarios[id];
+						administrador.reiniciarContrasena(usuarios[restablecer]);
+						System.out.println("Contraseña restablecida");
+					} else {
+						System.out.println("No puedes restablecer la contraseña de un administrador.");
+					}
+				} else {
+					System.out.println("El usuario con ID " + restablecer + " no existe.");
+				}
+				break;
+			case 2:
+				flag = false;
+				break;
+			}
+
+		} while (flag);
 
 	}
 
-	private static void iniciarSecion() {
+	// METODO PANEL DE PANEL DE USUARIO DESAROLLARA SOLAMENTE OPCION DE CAMBIAR SU
+	// PROPIA CONTRASEÑA O SALIR DE LA APLICACION
+
+	private static void panelUsuario(int id) {
+		boolean flag = true;
+		do {
+			System.out.println("BIENVENIDO USUARIO");
+			System.out.println("1.Cambiar la contraseña");
+			System.out.println("2.Para Salir");
+			int opcion = sn.nextInt();
+			switch (opcion) {
+			case 1:
+				try {
+					usuarios[id].setContrasena();
+				} catch (IllegalArgumentException e) {
+					System.out.println("Contraseña incorrecta");
+				}
+				break;
+			case 2:
+				flag = false;
+				break;
+			}
+
+		} while (flag);
 
 	}
 
@@ -74,7 +155,7 @@ public class Main {
 	private static void registrarAdministrador() {
 		int posicion = buscadorIdLibre();
 		if (posicion != -1) {
-			System.out.println("Dime el nombre del usuario");
+			System.out.println("Dime el nombre del usuario del Administrador");
 			String nombre = st.nextLine();
 			for (int i = 1; i < 2; i++) {
 				try {
@@ -102,4 +183,3 @@ public class Main {
 		}
 		return -1;
 	}
-}
